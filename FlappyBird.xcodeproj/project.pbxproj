@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51553AA25B4334200D1B30E /* coin_music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C51553A925B4334200D1B30E /* coin_music.mp3 */; };
 		C558437D25B1609300C94773 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C558437C25B1609300C94773 /* AppDelegate.swift */; };
 		C558437F25B1609300C94773 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C558437E25B1609300C94773 /* SceneDelegate.swift */; };
 		C558438125B1609300C94773 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C558438025B1609300C94773 /* ViewController.swift */; };
@@ -14,10 +15,10 @@
 		C558438625B1609800C94773 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C558438525B1609800C94773 /* Assets.xcassets */; };
 		C558438925B1609800C94773 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C558438725B1609800C94773 /* LaunchScreen.storyboard */; };
 		C558439125B1611F00C94773 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C558439025B1611F00C94773 /* GameScene.swift */; };
-		C558439325B303D100C94773 /* game-effect007.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C558439225B303D000C94773 /* game-effect007.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C51553A925B4334200D1B30E /* coin_music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coin_music.mp3; sourceTree = "<group>"; };
 		C558437925B1609300C94773 /* FlappyBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlappyBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C558437C25B1609300C94773 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C558437E25B1609300C94773 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -27,7 +28,6 @@
 		C558438825B1609800C94773 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C558438A25B1609800C94773 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C558439025B1611F00C94773 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		C558439225B303D000C94773 /* game-effect007.mp3 */ = {isa = PBXFileReference; explicitFileType = audio.mp3; path = "game-effect007.mp3"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,9 +66,9 @@
 				C558439025B1611F00C94773 /* GameScene.swift */,
 				C558438225B1609300C94773 /* Main.storyboard */,
 				C558438525B1609800C94773 /* Assets.xcassets */,
+				C51553A925B4334200D1B30E /* coin_music.mp3 */,
 				C558438725B1609800C94773 /* LaunchScreen.storyboard */,
 				C558438A25B1609800C94773 /* Info.plist */,
-				C558439225B303D000C94773 /* game-effect007.mp3 */,
 			);
 			path = FlappyBird;
 			sourceTree = "<group>";
@@ -132,9 +132,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C558438925B1609800C94773 /* LaunchScreen.storyboard in Resources */,
+				C51553AA25B4334200D1B30E /* coin_music.mp3 in Resources */,
 				C558438625B1609800C94773 /* Assets.xcassets in Resources */,
 				C558438425B1609300C94773 /* Main.storyboard in Resources */,
-				C558439325B303D100C94773 /* game-effect007.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,10 +295,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J4A4479MKS;
 				INFOPLIST_FILE = FlappyBird/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yu.iwawaki.FlappyBird;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -313,10 +315,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = J4A4479MKS;
 				INFOPLIST_FILE = FlappyBird/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.yu.iwawaki.FlappyBird;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

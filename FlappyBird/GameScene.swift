@@ -61,7 +61,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         itemNode = SKNode()
         scrollNode.addChild(itemNode)
         
-        soundAction = SKAction.playSoundFileNamed("game-effect007.mp3", waitForCompletion: true)
+        soundAction = SKAction.playSoundFileNamed("coin_music.mp3", waitForCompletion: true)
 //        soundAction = SKAction.init(named: "game-effect007.mp3")
         
         
@@ -182,7 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let slit_length = birdSize.height * 3
         
         // 隙間位置の上下の振れ幅を鳥のサイズの3倍とする
-        let random_y_range = birdSize.height * 10
+        let random_y_range = birdSize.height * 3
         
         // 下の壁のY軸下限位置(中央位置から下方向の最大振れ幅で下の壁を表示する位置)を計算
         let groundSize = SKTexture(imageNamed: "ground").size()
@@ -380,7 +380,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         bestScoreLabelNode.text = "Best Score:\(bestScore)"
         self.addChild(bestScoreLabelNode)
         
-        // アイテムスコア ★
+        // アイテムスコア
         itemScore = 0
         itemScoreLabelNode = SKLabelNode(fontNamed: "Helvetica")
         itemScoreLabelNode.fontColor = UIColor.black
@@ -416,7 +416,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
               userDefaults.synchronize()
             }
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
-            // アイテムと衝突した時 ★
+            // アイテムと衝突した時
             print("GetItem!")
     
 //             効果音を鳴らす

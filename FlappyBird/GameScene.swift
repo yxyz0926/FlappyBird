@@ -24,21 +24,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     let itemCategory: UInt32 = 1 << 4
     // スコア用
     var score = 0
-    var scoreLabelNode:SKLabelNode!    // ←追加
-    var bestScoreLabelNode:SKLabelNode!    // ←追加
+    var scoreLabelNode:SKLabelNode!
+    var bestScoreLabelNode:SKLabelNode!
     let userDefaults:UserDefaults = UserDefaults.standard
     
     // アイテムスコア用 ★
     var itemScore = 0
     var itemScoreLabelNode: SKLabelNode!
-    
-    
-    
+
     // 効果音ファイルの読み込み
     var soundAction:SKAction!
-    
-    
-  
     
     // SKView上にシーンが表示されたときに呼ばれるメソッド
     override func didMove(to view: SKView) {
@@ -73,6 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         setupScoreLabel()
         setupItem()
     }
+    
     
     func setupGround() {
         // 地面の画像を読み込む
@@ -109,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             sprite.physicsBody = SKPhysicsBody(rectangleOf: groundTexture.size())
             
             // 衝突のカテゴリー設定
-            sprite.physicsBody?.categoryBitMask = groundCategory    // ←追加
+            sprite.physicsBody?.categoryBitMask = groundCategory
             
             // 衝突の時に動かないように設定する
             sprite.physicsBody?.isDynamic = false
@@ -119,6 +115,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         }
         
     }
+    
+    
     func setupCloud() {
         // 雲の画像を読み込む
         let cloudTexture = SKTexture(imageNamed: "cloud")
@@ -179,10 +177,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let birdSize = SKTexture(imageNamed: "bird_a").size()
         
         // 鳥が通り抜ける隙間の長さを鳥のサイズの3倍とする
-        let slit_length = birdSize.height * 3
+        let slit_length = birdSize.height * 4
         
         // 隙間位置の上下の振れ幅を鳥のサイズの3倍とする
-        let random_y_range = birdSize.height * 3
+        let random_y_range = birdSize.height * 10
         
         // 下の壁のY軸下限位置(中央位置から下方向の最大振れ幅で下の壁を表示する位置)を計算
         let groundSize = SKTexture(imageNamed: "ground").size()
@@ -207,7 +205,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             
             // スプライトに物理演算を設定する
             under.physicsBody = SKPhysicsBody(rectangleOf: wallTexture.size())
-            under.physicsBody?.categoryBitMask = self.wallCategory    // ←追加
+            under.physicsBody?.categoryBitMask = self.wallCategory
             
             // 衝突の時に動かないように設定する
             under.physicsBody?.isDynamic = false
@@ -220,14 +218,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             
             // スプライトに物理演算を設定する
             upper.physicsBody = SKPhysicsBody(rectangleOf: wallTexture.size())
-            upper.physicsBody?.categoryBitMask = self.wallCategory    // ←追加
+            upper.physicsBody?.categoryBitMask = self.wallCategory
             
             // 衝突の時に動かないように設定する
             upper.physicsBody?.isDynamic = false
             
             wall.addChild(upper)
             
-            // スコアアップ用のノード --- ここから ---
+            // スコアアップ用のノード
             let scoreNode = SKNode()
             scoreNode.position = CGPoint(x: upper.size.width + birdSize.width / 2, y: self.frame.height / 2)
             scoreNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: upper.size.width, height: self.frame.size.height))
@@ -236,7 +234,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             scoreNode.physicsBody?.contactTestBitMask = self.birdCategory
             
             wall.addChild(scoreNode)
-            // --- ここまで追加 ---
+            
             
             wall.run(wallAnimation)
             
@@ -252,6 +250,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         wallNode.run(repeatForeverAnimation)
         
     }
+    
     
     func setupBird() {
         // 鳥の画像を2種類読み込む
@@ -272,12 +271,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
         
         // 衝突した時に回転させない
-        bird.physicsBody?.allowsRotation = false    // ←追加
+        bird.physicsBody?.allowsRotation = false
         
         // 衝突のカテゴリー設定
-        bird.physicsBody?.categoryBitMask = birdCategory    // ←追加
-        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory | itemCategory    // ←追加
-        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory | itemCategory  // ←追加
+        bird.physicsBody?.categoryBitMask = birdCategory
+        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory | itemCategory
+        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory | itemCategory
         
         // アニメーションを設定
         bird.run(flap)
@@ -286,6 +285,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         addChild(bird)
     
     }
+    
     
     func setupItem() {
         
@@ -299,7 +299,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let radius: CGFloat = 15
         
         // 移動する距離を計算
-        let movingDistance = CGFloat(self.frame.size.width + radius) * 1.1
+        let movingDistance = CGFloat(self.frame.size.width + radius) * 2.1
         
         // 画面外まで移動するアクションを作成
         let moveItem = SKAction.moveBy(x: -movingDistance, y: 0, duration: 8.0)
@@ -318,9 +318,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             //ひとまずランダムに表示
             let coin = SKShapeNode(circleOfRadius: radius)
             coin.fillColor = UIColor.yellow
-            let coinX = wall_width + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width / 5 - wall_width)))
-//            let circleX = radius * 2 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
-            let coinY = ground_height + radius * 5 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 5 - ground_height)))
+            let coinX = wall_width + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width / 1 - wall_width)))
+//            let coinX = radius * 2 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
+            let coinY = ground_height + radius * 1 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 1 - ground_height)))
             coin.position = CGPoint(x:coinX, y:coinY)
             
             
@@ -356,10 +356,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     
-    
-    
-    
-    
     func setupScoreLabel() {
         score = 0
         scoreLabelNode = SKLabelNode()
@@ -393,7 +389,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     
-    
     // SKPhysicsContactDelegateのメソッド。衝突したときに呼ばれる
     func didBegin(_ contact: SKPhysicsContact) {
         // ゲームオーバーのときは何もしない
@@ -405,13 +400,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             // スコア用の物体と衝突した
             print("ScoreUp")
             score += 1
-            scoreLabelNode.text = "Score:\(score)"    // ←追加
+            scoreLabelNode.text = "Score:\(score)"
             
             // ベストスコア更新か確認する
             var bestScore = userDefaults.integer(forKey: "BEST")
             if score > bestScore {
                 bestScore = score
-                bestScoreLabelNode.text = "Best Score:\(bestScore)"    // ←追加
+                bestScoreLabelNode.text = "Best Score:\(bestScore)"
                 userDefaults.set(bestScore, forKey: "BEST")
               userDefaults.synchronize()
             }
@@ -450,13 +445,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     
-    
-    
     func restart() {
         score = 0
-        scoreLabelNode.text = "Score:\(score)"    // ←追加
+        scoreLabelNode.text = "Score:\(score)"
         
-        // アイテムスコア用 ★
+        // アイテムスコア用
         itemScore = 0
         itemScoreLabelNode.text = String("Item Score:\(itemScore)")
         
@@ -471,6 +464,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         scrollNode.speed = 1
     }
     
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if scrollNode.speed > 0 { // 追加
             // 鳥の速度をゼロにする
@@ -480,23 +474,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             
             // 鳥に縦方向の力を与える
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 15))
-        } else if bird.speed == 0 { // --- ここから ---
+        } else if bird.speed == 0 {
             restart()
-        } // --- ここまで追加 ---
-        
-        
+        }
         
     }
-    
-////    //接触開始時の呼び出しメソッド
-//       func didBeginContact(contact: SKPhysicsContact) {
-//
-//
-//
-//           //アクションを実行する。
-//        self.run(soundAction)
-//
-//       }
-//
     
 }

@@ -8,7 +8,8 @@
 
 import SpriteKit
 
-class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
+
+class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     var scrollNode:SKNode!
     var wallNode:SKNode!
@@ -36,6 +37,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
     // 効果音ファイルの読み込み
     var soundAction:SKAction!
     
+    
+  
+    
     // SKView上にシーンが表示されたときに呼ばれるメソッド
     override func didMove(to view: SKView) {
         
@@ -56,6 +60,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         
         itemNode = SKNode()
         scrollNode.addChild(itemNode)
+        
+        soundAction = SKAction.playSoundFileNamed("game-effect007.mp3", waitForCompletion: true)
+//        soundAction = SKAction.init(named: "game-effect007.mp3")
         
         
         // 各種スプライトを生成する処理をメソッドに分割
@@ -175,7 +182,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         let slit_length = birdSize.height * 3
         
         // 隙間位置の上下の振れ幅を鳥のサイズの3倍とする
-        let random_y_range = birdSize.height * 3
+        let random_y_range = birdSize.height * 10
         
         // 下の壁のY軸下限位置(中央位置から下方向の最大振れ幅で下の壁を表示する位置)を計算
         let groundSize = SKTexture(imageNamed: "ground").size()
@@ -269,8 +276,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         
         // 衝突のカテゴリー設定
         bird.physicsBody?.categoryBitMask = birdCategory    // ←追加
-        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory    // ←追加
-        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory    // ←追加
+        bird.physicsBody?.collisionBitMask = groundCategory | wallCategory | itemCategory    // ←追加
+        bird.physicsBody?.contactTestBitMask = groundCategory | wallCategory | itemCategory  // ←追加
         
         // アニメーションを設定
         bird.run(flap)
@@ -292,10 +299,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         let radius: CGFloat = 15
         
         // 移動する距離を計算
-        let movingDistance = CGFloat(self.frame.size.width + radius) * 1.12
+        let movingDistance = CGFloat(self.frame.size.width + radius) * 1.1
         
         // 画面外まで移動するアクションを作成
-        let moveItem = SKAction.moveBy(x: -movingDistance, y: 0, duration: 4.0)
+        let moveItem = SKAction.moveBy(x: -movingDistance, y: 0, duration: 8.0)
         
         // 自身取り除くアクションを作成
         let removeItem = SKAction.removeFromParent()
@@ -309,22 +316,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
             item.position = CGPoint(x: self.frame.size.width + radius, y: 0.0)
             item.zPosition = -50 // 雲より手前、地面より奥
             //ひとまずランダムに表示
-            let circle = SKShapeNode(circleOfRadius: radius)
-            circle.fillColor = UIColor.yellow
-            let circleX = wall_width + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width / 2 - wall_width)))
-            //let circleX = radius * 2 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
-            let circleY = ground_height + radius * 2 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 2 - ground_height)))
-            circle.position = CGPoint(x:circleX, y:circleY)
+            let coin = SKShapeNode(circleOfRadius: radius)
+            coin.fillColor = UIColor.yellow
+            let coinX = wall_width + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width / 5 - wall_width)))
+//            let circleX = radius * 2 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.width - radius * 2)))
+            let coinY = ground_height + radius * 5 + (CGFloat)(arc4random_uniform((UInt32)(self.frame.height - radius * 5 - ground_height)))
+            coin.position = CGPoint(x:coinX, y:coinY)
+            
             
             // アイテムに物理演算を設定する
-            circle.physicsBody = SKPhysicsBody(circleOfRadius: radius)
-            circle.physicsBody?.affectedByGravity = false
-            circle.physicsBody?.categoryBitMask = self.itemCategory
+            coin.physicsBody = SKPhysicsBody(circleOfRadius: radius)
+            coin.physicsBody?.affectedByGravity = false
+            coin.physicsBody?.categoryBitMask = self.itemCategory
             
             // 衝突の時に動かないように設定する
-            circle.physicsBody?.isDynamic = false
+            coin.physicsBody?.isDynamic = false
             
-            item.addChild(circle)
+            
+            
+            
+            item.addChild(coin)
             
             item.run(itemAnimation)
             
@@ -373,7 +384,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         itemScore = 0
         itemScoreLabelNode = SKLabelNode(fontNamed: "Helvetica")
         itemScoreLabelNode.fontColor = UIColor.black
-        itemScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 90)
+        itemScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 120)
         itemScoreLabelNode.zPosition = 100 // 一番手前に表示する
         itemScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         itemScoreLabelNode.text = "Item Score:\(itemScore)"
@@ -407,9 +418,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             // アイテムと衝突した時 ★
             print("GetItem!")
-            
-            // 効果音を鳴らす
+    
+//             効果音を鳴らす
             self.run(soundAction)
+            
+            
             
             var circleBody: SKPhysicsBody
             if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
@@ -463,11 +476,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate /* 追加 */ {
             // 鳥の速度をゼロにする
             bird.physicsBody?.velocity = CGVector.zero
             
+            
+            
             // 鳥に縦方向の力を与える
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 15))
         } else if bird.speed == 0 { // --- ここから ---
             restart()
         } // --- ここまで追加 ---
+        
+        
+        
     }
+    
+////    //接触開始時の呼び出しメソッド
+//       func didBeginContact(contact: SKPhysicsContact) {
+//
+//
+//
+//           //アクションを実行する。
+//        self.run(soundAction)
+//
+//       }
+//
     
 }
